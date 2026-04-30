@@ -19,6 +19,7 @@ def fetch_page(url):
     try:
         response = requests.get(url)
         response.raise_for_status()  # Raises HTTPError for bad responses (4xx, 5xx)
+        print(f"Successfully fetched {url}")
         return BeautifulSoup(response.text, "html.parser")
     except requests.RequestException as e:
         print(f"Error fetching {url}: {e}")
@@ -37,23 +38,25 @@ def get_quote_pages():
     current_url = BASE_URL
 
     while current_url:
-        # TODO: Print which URL is being fetched (helpful for debugging)
-        # TODO: Call fetch_page(current_url)
-        # TODO: If fetch fails, break out of loop
-        
-        # TODO: Extract text content from this page
-        #       Hint: look at quote divs and extract their text
-        
-        # TODO: Append {"url": current_url, "content": page_text} to pages
-        
-        # TODO: Look for the next page link
-        #       Hint: soup.find("li", class_="next")
-        #       If found, update current_url to BASE_URL + href
-        #       If not found, set current_url to None (stops the loop)
-        
-        # TODO: Respect the politeness window — time.sleep(POLITENESS_WINDOW)
-        pass
+        print(f"Crawling {current_url}...")
+        soup = fetch_page(current_url)
+        if not soup:
+            break
 
+        quotes = soup.find_all("div", class_="quote")
+        page_text = " ".join(quote.get_text(strip=True) for quote in quotes)
+        pages.append({"url": current_url, "content": page_text})
+        
+        # Look for the next page link
+        next_link = soup.find("li", class_="next")
+
+        if next_link and next_link.a:
+            next_url = next_link.a['href']
+            current_url = BASE_URL + next_url
+        else:
+            current_url = None  # No more pages to crawl
+
+        time.sleep(POLITENESS_WINDOW)
     return pages
 
 
