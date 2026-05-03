@@ -1,5 +1,5 @@
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, soup
 import time
 
 BASE_URL = "https://quotes.toscrape.com"
@@ -73,17 +73,16 @@ def get_author_pages(author_urls):
     pages = []
 
     for url in author_urls:
-        # TODO: Call fetch_page(url)
-        # TODO: If fetch fails, skip this author with continue
-        
-        # TODO: Extract the author description text
-        #       Hint: soup.find("div", class_="author-description")
-        
-        # TODO: Append {"url": url, "content": description_text} to pages
-        
-        # TODO: Respect the politeness window
-        pass
+        soup = fetch_page(url)
 
+        if not soup:
+            continue  # Skip this author if fetch fails
+        else:
+            description = soup.find("div", class_="author-description")
+
+            pages.append({"url": url, "content": description.get_text(strip=True) if description else ""})
+        
+        time.sleep(POLITENESS_WINDOW)
     return pages
 
 
