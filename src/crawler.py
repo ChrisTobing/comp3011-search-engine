@@ -97,11 +97,17 @@ def collect_author_urls(soup):
     Returns:
         A list of full author URLs (strings)
     """
-    # TODO: Find all quote divs
-    # TODO: Within each, find the author link <a> tag
-    # TODO: Build the full URL using BASE_URL + href
-    # TODO: Return the list of URLs
-    pass
+    quotes = soup.find_all("div", class_="quote")
+    author_urls = []
+
+    for quote in quotes:
+        author_class = quote.find("small", class_="author")
+        author_url = author_class.find_next_sibling("a") if author_class else None
+        if author_url and 'href' in author_url.attrs:
+            full_url = BASE_URL + author_url['href']
+            author_urls.append(full_url)
+    
+    return author_urls
 
 
 def crawl():

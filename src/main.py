@@ -11,4 +11,4 @@ if __name__ == "__main__":
     # fetch_page("http://quotes.toscrape.com/")  # test_fetch_page()
     # test_collect_author_urls()
     # test_get_quote_pages()
-    print(get_quote_pages())
+    print(collect_author_urls(fetch_page("http://quotes.toscrape.com/")))  # test_collect_author_urls()
