@@ -1,5 +1,5 @@
 import requests
-from bs4 import BeautifulSoup, soup
+from bs4 import BeautifulSoup
 import time
 
 BASE_URL = "https://quotes.toscrape.com"
@@ -121,11 +121,16 @@ def crawl():
     all_pages = []
     author_urls = []
 
-    # TODO: Call get_quote_pages() and store results
-    # TODO: As you crawl quote pages, collect author URLs using collect_author_urls()
-    # TODO: Deduplicate author_urls (same author may appear multiple times)
-    #       Hint: list(set(author_urls))
-    # TODO: Call get_author_pages() with the deduplicated URLs
-    # TODO: Combine quote pages and author pages into all_pages
-    # TODO: Return all_pages
-    pass
+    quote_pages = get_quote_pages()
+
+    for quote_page in quote_pages:
+        all_pages.append(quote_page)
+        url = quote_page["url"]
+        soup = fetch_page(url)
+        author_urls.extend(collect_author_urls(soup))
+        author_urls = list(set(author_urls))
+    
+    author_pages = get_author_pages(author_urls)
+    for author_page in author_pages:
+        all_pages.append(author_page)
+    return all_pages
