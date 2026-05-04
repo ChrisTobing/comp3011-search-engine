@@ -1,4 +1,5 @@
 import re
+import json
 
 def build_index(pages):
     index = {}
@@ -20,9 +21,10 @@ def build_index(pages):
     return index
 
 def save_index(index, filepath="data/index.json"):
-    """Saves the index to a JSON file"""
-    pass
+    with open(filepath, "w") as f:
+        json.dump(index, f)
 
 def load_index(filepath="data/index.json"):
-    """Loads the index from a JSON file"""
-    pass
+    with open(filepath, "r") as f:
+        index = json.load(f)
+    return index
