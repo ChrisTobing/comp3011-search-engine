@@ -18,6 +18,7 @@ def main():
         if command == "build":
             crawled_pages = crawl()
             index = build_index(crawled_pages)
+            save_index(index)
             print("Index built successfully.")
         
         elif command == "load":
@@ -32,9 +33,15 @@ def main():
         
         elif command == "find":
             if index:
-                find_pages(index, args)
+                results = find_pages(index, args)
+                if results:
+                    print("Pages Found:")
+                    for url in results:
+                        print(url)
+                else:
+                    print("No pages found for that query")
             else:
-                print("Invalid command or no index loaded. Please build or load an index first.")
+                print("No index loaded. Please build or load an index first.")
         
         elif command == "quit":
             print("Goodbye!")
