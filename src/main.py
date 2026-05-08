@@ -1,7 +1,6 @@
 from crawler import crawl
 from indexer import build_index, save_index, load_index
 from search import print_word, find_pages
-from tests.test_indexer import TestBuildIndex
 
 def main():
     index = None  # Start with no index loaded
@@ -51,8 +50,5 @@ def main():
         else:
             print(f"Unknown command: '{command}'")
 
-def test():
-    TestBuildIndex().test_basic_frequency()
-
 if __name__ == "__main__":
-    test()
+    main()
