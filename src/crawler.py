@@ -17,7 +17,7 @@ def fetch_page(url):
         BeautifulSoup object if successful, None if request fails
     """
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         response.raise_for_status()  # Raises HTTPError for bad responses (4xx, 5xx)
         print(f"Successfully fetched {url}")
         return BeautifulSoup(response.text, "html.parser")
